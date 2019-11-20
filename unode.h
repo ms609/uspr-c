@@ -319,7 +319,7 @@ class unode {
 			}
 			count++;
 		}
-		return (unode) 0; // Never reached, but appeases compiler
+		return parent; // Never reached, but appeases compiler
 	}
 
 	void clear_neighbors() {
