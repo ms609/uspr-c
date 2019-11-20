@@ -32,7 +32,7 @@ along with uspr.  If not, see <http://www.gnu.org/licenses/>.
 #ifdef DEBUG
 	#define debug(x) x
 #else
-	#define debug(x) 
+	#define debug(x)
 #endif
 
 #include <list>
@@ -319,6 +319,7 @@ class unode {
 			}
 			count++;
 		}
+		return 0; // Never reached, but appeases compiler
 	}
 
 	void clear_neighbors() {

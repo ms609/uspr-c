@@ -493,9 +493,9 @@ bool build_utree(utree &t, string &s, map<string, int> *label_map, map<int, stri
 unsigned int build_utree_helper(utree &t, string &s, int start, unode *parent, bool &valid, map<string, int> *label_map, map<int, string> *reverse_label_map) {
 	// next special char
 	unsigned int loc = s.find_first_of("(,)", start);
-	if (loc == string::npos) {
+	/*if (loc == string::npos) { // MS note: Compiler reports that this is always false
 		return loc;
-	}
+	}*/
 	if (s[loc] != '(') {
 		// leaf
 		while(s[start] == ' ' || s[start] == '\t')
