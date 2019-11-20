@@ -57,9 +57,9 @@ class uforest: public utree {
 			components = vector<unode *>(components_size);
 			// update with the new nodes
 			for(int i = 0; i < components_size; i++) {
-//				cout << "components[" << i << "]" << endl;
+//				Rcout << "components[" << i << "]" << endl;
 				components[i] = get_node(F.components[i]->get_label());
-//				cout << "\t" << F.components[i] << ", " << components[i] << endl;
+//				Rcout << "\t" << F.components[i] << ", " << components[i] << endl;
 			}
 		}
 		uforest& operator=(uforest F) {
@@ -120,11 +120,11 @@ class uforest: public utree {
 			unode *X, *Y;
 			X = get_node(x);
 			Y = get_node(y);
-			//cout << "d_X: " << X->get_distance() << endl;
-			//cout << "d_Y: " << Y->get_distance() << endl;
+			//Rcout << "d_X: " << X->get_distance() << endl;
+			//Rcout << "d_Y: " << Y->get_distance() << endl;
 			bool swapped = false;
 			if (Y->get_distance() > X->get_distance()) {
-				//cout << "AHH!" << endl;
+				//Rcout << "AHH!" << endl;
 				X = get_node(y);
 				Y = get_node(x);
 				swapped = true;
@@ -141,7 +141,7 @@ class uforest: public utree {
 
 
 			if (Xprime->get_component() > -1) {
-				//cout << "boo" << endl;
+				//Rcout << "boo" << endl;
 				add_component(Yprime);
 				update_component(Xprime->get_component(), Xprime);
 				if (Yprime->get_component() > -1) {
@@ -149,7 +149,7 @@ class uforest: public utree {
 				}
 			}
 			else {
-				//cout << "urns" << endl;
+				//Rcout << "urns" << endl;
 				add_component(Xprime);
 				if (Yprime->get_component() > -1) {
 					update_component(Yprime->get_component(), Yprime);

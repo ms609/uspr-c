@@ -271,20 +271,20 @@ class unode {
 	}
 
 	bool is_adjacent(unode *a) {
-//		cout << label << "->is_adjacent(" << a->get_label() << ")" << endl;
+//		Rcout << label << "->is_adjacent(" << a->get_label() << ")" << endl;
 		for (unode *n : neighbors) {
 			if (n == a) {
-//				cout << "true" << endl;
+//				Rcout << "true" << endl;
 				return true;
 			}
 		}
 		for (unode *n : contracted_neighbors) {
 			if (n == a) {
-//				cout << "true" << endl;
+//				Rcout << "true" << endl;
 				return true;
 			}
 		}
-//		cout << "false" << endl;
+//		Rcout << "false" << endl;
 		return false;
 	}
 
@@ -354,7 +354,7 @@ class unode {
 
 	unode *contract_degree_two_subtree(unode *last = NULL) {
 		debug(
-			cout << label << ".contract_degree_two_subtree()" << endl;
+			Rcout << label << ".contract_degree_two_subtree()" << endl;
 		)
 		list<unode *> neighbor_copy = list<unode *>(get_neighbors());
 		for (unode *n : neighbor_copy) {
@@ -367,8 +367,8 @@ class unode {
 
 	unode *contract() {
 		debug(
-			cout << "n: " << num_neighbors << endl;
-			cout << "c_n: " << contracted_neighbors.size() << endl;
+			Rcout << "n: " << num_neighbors << endl;
+			Rcout << "c_n: " << contracted_neighbors.size() << endl;
 		)
 		if (num_neighbors == 1 && contracted_neighbors.empty()) {
 			unode *p = neighbors.front();
@@ -390,9 +390,9 @@ class unode {
 			unode *p = contracted_neighbors.front();
 			unode *c = *(next(contracted_neighbors.begin(), 1));
 			debug(
-				cout << "contracting:" << endl;
-				cout << p << "\t" << p->get_num_all_neighbors() << endl;
-				cout << c << "\t" << c->get_num_all_neighbors() << endl;
+				Rcout << "contracting:" << endl;
+				Rcout << p << "\t" << p->get_num_all_neighbors() << endl;
+				Rcout << c << "\t" << c->get_num_all_neighbors() << endl;
 			)
 			if (p->get_num_all_neighbors() < c->get_num_all_neighbors()) {
 				unode *temp = p;
@@ -435,9 +435,9 @@ class unode {
 			unode *p = neighbors.front();
 			unode *c = *(next(neighbors.begin(), 1));
 			debug(
-				cout << "contracting:" << endl;
-				cout << p << endl;
-				cout << c << endl;
+				Rcout << "contracting:" << endl;
+				Rcout << p << endl;
+				Rcout << c << endl;
 			)
 			if (!p->is_leaf() ||
 						!(p->get_contracted_neighbors().empty()) ||

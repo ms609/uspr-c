@@ -140,8 +140,8 @@ int uspr_distance(uforest &T1_original, uforest &T2_original) {
 	T2.normalize_order();
 
 	debug_uspr(
-		cout << "T1R: " << T1 << endl;
-		cout << "T2R: " << T2 << endl;
+		Rcout << "T1R: " << T1 << endl;
+		Rcout << "T2R: " << T2 << endl;
 	)
 
 
@@ -180,8 +180,8 @@ int uspr_distance(uforest &T1_original, uforest &T2_original) {
 
 		// debugging
 		debug_uspr(
-			cout << it->distance << ": " << it->cost << " + " << it->estimate << " using " << estimator_t_name[it->estimator] << endl;
-			cout << "\t" << it->tree << endl;
+			Rcout << it->distance << ": " << it->cost << " + " << it->estimate << " using " << estimator_t_name[it->estimator] << endl;
+			Rcout << "\t" << it->tree << endl;
 		)
 
 		// remove the old entry
@@ -229,21 +229,21 @@ int uspr_distance(uforest &T1_original, uforest &T2_original) {
 
 		list<utree> neighbors = get_neighbors(&T, &visited_trees);
 		debug_uspr(
-			cout << "examining " << neighbors.size() << " neighbors" << endl;
+			Rcout << "examining " << neighbors.size() << " neighbors" << endl;
 		)
 		for (utree tree : neighbors) {
 			string tree_string = tree.str();
-//			cout << "neighbor: " << tree_string << endl;
-//			cout << "target: " << target << endl;
+//			Rcout << "neighbor: " << tree_string << endl;
+//			Rcout << "target: " << target << endl;
 				if (tree_string == target) {
-//					cout << "returning " << cost+1 << endl;
+//					Rcout << "returning " << cost+1 << endl;
 					debug_uspr(
-					  cout << "examined " << visited_trees.size() << " trees" << endl;
+					  Rcout << "examined " << visited_trees.size() << " trees" << endl;
 					)
 					return cost+1;
 				}
 //				else {
-//					cout << "cond: " << (tree_string == target) << endl;
+//					Rcout << "cond: " << (tree_string == target) << endl;
 //				}
 				distance_priority_queue.insert(tree_distance(cost+1, 1, tree_string, BFS));
 		}

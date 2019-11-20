@@ -128,19 +128,19 @@ void add_neighbor(utree *T, unode *x, unode *y, unode *w, unode *z, list<utree> 
 	unode *y1 = NULL;
 	unode *y2 = NULL;
 	// apply the spr
-/*	cout << endl;
-	cout << "T: " << T->str(true) << endl;
-	cout << "\tx: " << x->get_label() << endl;
-	cout << "\ty: " << y->get_label() << endl;
-	cout << "\tw: " << w->get_label() << endl;
-	cout << "\tz: " << z->get_label() << endl;
+/*	Rcout << endl;
+	Rcout << "T: " << T->str(true) << endl;
+	Rcout << "\tx: " << x->get_label() << endl;
+	Rcout << "\ty: " << y->get_label() << endl;
+	Rcout << "\tw: " << w->get_label() << endl;
+	Rcout << "\tz: " << z->get_label() << endl;
 */
 	T->uspr(x, y, w, z, &yprime, &y1, &y2);
 	// normalize the tree
 	distances_from_leaf_decorator(*T, T->get_smallest_leaf());
 	T->normalize_order();
 	// print the tree
-	//	cout << "neighbor: " << T->str() << endl;
+	//	Rcout << "neighbor: " << T->str() << endl;
 	string tree_string = T->str();
 	bool add_tree = true;
 	if (known_trees != NULL) {
@@ -160,8 +160,8 @@ void add_neighbor(utree *T, unode *x, unode *y, unode *w, unode *z, list<utree> 
 	T->uspr(x, yprime, y1, y2);
 	distances_from_leaf_decorator(*T, T->get_smallest_leaf());
 	T->normalize_order();
-//	cout << "T: " << T->str() << endl;
-//	cout << endl;
+//	Rcout << "T: " << T->str() << endl;
+//	Rcout << endl;
 	return;
 }
 #endif

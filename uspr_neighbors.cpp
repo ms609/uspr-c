@@ -94,7 +94,7 @@ int main(int argc, char *argv[]) {
 		else if (strcmp(arg, "--help") == 0 ||
 				strcmp(arg, "-h") == 0 ||
 				strcmp(arg, "-help") == 0) {
-			cout << USAGE;
+			Rcout << USAGE;
 			return 0;
 		}
 	}
@@ -113,18 +113,18 @@ int main(int argc, char *argv[]) {
 		uforest F1 = uforest(T_line, &label_map, &reverse_label_map);
 		F1.normalize_order();
 		if (!IGNORE_ORIGINAL) {
-			cout << F1.str(false, &reverse_label_map) << endl;
+			Rcout << F1.str(false, &reverse_label_map) << endl;
 		}
 
 		// compute neighbors
 		list<utree> neighbors = get_neighbors(&F1);
 		if (SIZE_ONLY) {
 			int size = neighbors.size();
-			cout << size << " neighbors" << endl;
+			Rcout << size << " neighbors" << endl;
 		}
 		else {
 			for (utree T: neighbors) {
-				cout << T.str(false, &reverse_label_map) << endl;
+				Rcout << T.str(false, &reverse_label_map) << endl;
 			}
 		}
 	}

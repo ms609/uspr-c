@@ -307,14 +307,14 @@ int tbr_distance(uforest &T1, uforest &T2, T t, int (*func_pointer)(uforest &F1,
 
 	for(int k = start; k < 100; k++) {
 			if (!quiet) {
-				cout << "{" << k << "} ";
-				cout.flush();
+				Rcout << "{" << k << "} ";
+				Rcout.flush();
 			}
 			// test k
 			int result = tbr_distance_hlpr(T1, T2, k, t, func_pointer, MAF1, MAF2);
 			if (result >= 0) {
 				if (!quiet) {
-					cout << endl;
+					Rcout << endl;
 				}
 				return k - result;
 			}
@@ -328,14 +328,14 @@ int tbr_count_MAFs(uforest &T1, uforest &T2, bool quiet) {
 
 	for(int k = start; k < 100; k++) {
 		if (!quiet) {
-			cout << "{" << k << "} ";
-			cout.flush();
+			Rcout << "{" << k << "} ";
+			Rcout.flush();
 		}
 		// test k
 		int result = tbr_distance_hlpr(T1, T2, k, &count, &count_mAFs);
 		if (result >= 0) {
 			if (!quiet) {
-				cout << endl;
+				Rcout << endl;
 			}
 			return count;
 		}
@@ -354,8 +354,8 @@ int tbr_count_mAFs(uforest &T1, uforest &T2, bool quiet, bool print) {
 
 	for(int k = start; k < 100; k++) {
 		if (!quiet) {
-			cout << "{" << k << "} ";
-			cout.flush();
+			Rcout << "{" << k << "} ";
+			Rcout.flush();
 		}
 		// test k
 		int new_count = 0;
@@ -368,15 +368,15 @@ int tbr_count_mAFs(uforest &T1, uforest &T2, bool quiet, bool print) {
 		}
 		if (result >= 0) {
 			if (!quiet) {
-				cout << endl;
-				cout << "found " << new_count << " mAFs" << endl;
+				Rcout << endl;
+				Rcout << "found " << new_count << " mAFs" << endl;
 			}
 			if (count < new_count) {
 				count = new_count;
 			}
 			else {
 				if (!quiet) {
-					cout << endl;
+					Rcout << endl;
 				}
 				return count;
 			}
@@ -451,14 +451,14 @@ int tbr_distance_hlpr(uforest &T1, uforest &T2, int k, T t,
 	distances_from_leaf_decorator(F1, F1.get_smallest_leaf());
 	distances_from_leaf_decorator(F2, F2.get_smallest_leaf());
 	debug(
-		cout << endl << F1 << endl;
+		Rcout << endl << F1 << endl;
 		for(int i : F1.find_leaves()) {
-			cout << i << ": " << F1.get_node(i)->get_distance() << endl;
+			Rcout << i << ": " << F1.get_node(i)->get_distance() << endl;
 		}
 
-		cout << F2 << endl;
+		Rcout << F2 << endl;
 		for(int i : F2.find_leaves()) {
-			cout << i << ": " << F2.get_node(i)->get_distance() << endl;
+			Rcout << i << ": " << F2.get_node(i)->get_distance() << endl;
 		}
 	)
 
@@ -477,7 +477,7 @@ int tbr_distance_hlpr(uforest &F1, uforest &F2, int k, nodemapping &twins,
 		return -1;
 	}
 
-	debug(cout << "tbr_distance_hlpr(" << k << ")" << endl);
+	debug(Rcout << "tbr_distance_hlpr(" << k << ")" << endl);
 	Rcpp::checkUserInterrupt();
 
 	// if (sib pair list is not empty, k>=0) {
@@ -486,17 +486,17 @@ int tbr_distance_hlpr(uforest &F1, uforest &F2, int k, nodemapping &twins,
 		// Case 1 : Isolated Subtree
 		while (!singletons.empty()) {
 
-			debug(cout << "Case 1" << endl);
+			debug(Rcout << "Case 1" << endl);
 
 			unode *F2_a = F2.get_node(singletons.front());
 			singletons.pop_front();
 			unode *F1_a = F1.get_node(twins.get_backward(F2_a->get_label()));
 			debug(
-				cout << "F1: " << F1.str() << endl;
-				cout << "F1_a: " << F1.str_subtree(F1_a) << endl;
+				Rcout << "F1: " << F1.str() << endl;
+				Rcout << "F1_a: " << F1.str_subtree(F1_a) << endl;
 
-				cout << "F2: " << F2.str() << endl;
-				cout << "F2_a: " << F2.str_subtree(F2_a) << endl;
+				Rcout << "F2: " << F2.str() << endl;
+				Rcout << "F2_a: " << F2.str_subtree(F2_a) << endl;
 			)
 
 			// remove from sibling pairs if necessary
@@ -510,7 +510,7 @@ int tbr_distance_hlpr(uforest &F1, uforest &F2, int k, nodemapping &twins,
 				sibling_pairs.erase(spi->first);
 			}
 
-			debug(cout << F1 << endl);
+			debug(Rcout << F1 << endl);
 
 			if (F1_a->get_parent() == NULL) {
 				continue;
@@ -521,15 +521,15 @@ int tbr_distance_hlpr(uforest &F1, uforest &F2, int k, nodemapping &twins,
 			update_nodemapping(twins, F1, first_label, components.first, true);
 			update_nodemapping(twins, F1, second_label, components.second, true);
 
-			debug(cout << F1 << endl);
+			debug(Rcout << F1 << endl);
 
 			// check for new sibling pair
 			debug(
-				cout << F1.str_subtree(F1.get_node(components.first)) << endl;
-				cout << F1.str_subtree(F1.get_node(components.second)) << endl;
-//			cout << F1_new_terminal->get_parent()->get_distance() << endl;
-//			cout << F1_new_terminal->get_distance() << endl;
-				cout << "checking for sibling pair" << endl;
+				Rcout << F1.str_subtree(F1.get_node(components.first)) << endl;
+				Rcout << F1.str_subtree(F1.get_node(components.second)) << endl;
+//			Rcout << F1_new_terminal->get_parent()->get_distance() << endl;
+//			Rcout << F1_new_terminal->get_distance() << endl;
+				Rcout << "checking for sibling pair" << endl;
 			)
 
 			// check for sibling pair
@@ -543,10 +543,10 @@ int tbr_distance_hlpr(uforest &F1, uforest &F2, int k, nodemapping &twins,
 				}
 			}
 			int i = new_sibling_pair.size();
-			debug(cout << new_sibling_pair.size() << endl);
+			debug(Rcout << new_sibling_pair.size() << endl);
 			if (i >= 2) {
 				if (sibling_pairs.find(new_sibling_pair[i-1]) == sibling_pairs.end() && sibling_pairs.find(new_sibling_pair[i-2]) == sibling_pairs.end()) {
-					debug(cout << "sibling_pair found" << endl);
+					debug(Rcout << "sibling_pair found" << endl);
 					sibling_pairs.insert(make_pair(new_sibling_pair[i-2], new_sibling_pair[i-1]));
 					sibling_pairs.insert(make_pair(new_sibling_pair[i-1], new_sibling_pair[i-2]));
 				}
@@ -559,9 +559,9 @@ int tbr_distance_hlpr(uforest &F1, uforest &F2, int k, nodemapping &twins,
 		}
 
 		debug(
-			cout << "sibling pairs: " << sibling_pairs.size() << endl;
+			Rcout << "sibling pairs: " << sibling_pairs.size() << endl;
 			for (pair<int, int> p: sibling_pairs) {
-				cout << p.first << ", " << p.second << endl;
+				Rcout << p.first << ", " << p.second << endl;
 			}
 		)
 
@@ -592,14 +592,14 @@ int tbr_distance_hlpr(uforest &F1, uforest &F2, int k, nodemapping &twins,
 		}
 
 		debug(
-			cout << "F1: " << F1.str() << endl;
-			cout << "F1_a: " << F1.str_subtree(F1_a) << endl;
-			cout << "F1_c: " << F1.str_subtree(F1_c) << endl;
+			Rcout << "F1: " << F1.str() << endl;
+			Rcout << "F1_a: " << F1.str_subtree(F1_a) << endl;
+			Rcout << "F1_c: " << F1.str_subtree(F1_c) << endl;
 
 
-			cout << "F2: " << F2.str() << endl;
-			cout << "F2_a: " << F2.str_subtree(F2_a) << endl;
-			cout << "F2_c: " << F2.str_subtree(F2_c) << endl;
+			Rcout << "F2: " << F2.str() << endl;
+			Rcout << "F2_a: " << F2.str_subtree(F2_a) << endl;
+			Rcout << "F2_c: " << F2.str_subtree(F2_c) << endl;
 		)
 
 
@@ -612,12 +612,12 @@ int tbr_distance_hlpr(uforest &F1, uforest &F2, int k, nodemapping &twins,
 				F2_a->get_parent() == F2_c ||
 				F2_c->get_parent() == F2_a) {
 
-			debug(cout << "Case 2" << endl);
+			debug(Rcout << "Case 2" << endl);
 
 			// make terminal in F1
 			// contract F1_a and F1_c
 			unode *F1_new_terminal = F1_a->get_parent();
-			debug(cout << "F1_new_terminal: " << F1.str_subtree(F1_new_terminal) << endl);
+			debug(Rcout << "F1_new_terminal: " << F1.str_subtree(F1_new_terminal) << endl);
 			F1_new_terminal->set_terminal(true);
 			F1_new_terminal->contract_neighbor(F1_a);
 			F1_new_terminal->contract_neighbor(F1_c);
@@ -655,8 +655,8 @@ int tbr_distance_hlpr(uforest &F1, uforest &F2, int k, nodemapping &twins,
 			// make terminal in F2
 			// contract F2_a and F2_c
 			debug(
-				cout << "d(F2_a): " << F2_a->get_distance() << endl;
-				cout << "d(F2_c): " << F2_c->get_distance() << endl;
+				Rcout << "d(F2_a): " << F2_a->get_distance() << endl;
+				Rcout << "d(F2_c): " << F2_c->get_distance() << endl;
 			)
 			unode *F2_new_terminal = F2_a->get_parent();
 			if (F2_c->get_parent() == F2_a &&
@@ -697,7 +697,7 @@ int tbr_distance_hlpr(uforest &F1, uforest &F2, int k, nodemapping &twins,
 		}
 
 		else if (F2_a->get_parent() == F2_c) {
-			debug(cout << "Case 2.5" << endl);
+			debug(Rcout << "Case 2.5" << endl);
 		}
 
 		// TODO: 2.5 where (F2_c->get_parent() == F2_a) ?
@@ -706,7 +706,7 @@ int tbr_distance_hlpr(uforest &F1, uforest &F2, int k, nodemapping &twins,
 
 		else {
 
-			debug(cout << "Case 3" << endl);
+			debug(Rcout << "Case 3" << endl);
 
 			if (k <= 0) {
 				return -1;
@@ -724,26 +724,26 @@ int tbr_distance_hlpr(uforest &F1, uforest &F2, int k, nodemapping &twins,
 			// find pendant edges between a and c in F2
 			// TODO: need distances from "root" to do this efficiently
 
-			debug(cout << F2.str_with_depths() << endl);
+			debug(Rcout << F2.str_with_depths() << endl);
 
 			list<pair<int,int> > pendants = find_pendants(F2_a, F2_c);
 			int num_pendants = pendants.size();
 			debug(
-				cout << "path:" << endl;
+				Rcout << "path:" << endl;
 				list<unode *> path = list<unode *>();
 				get_path(F2_a, F2_c, path);
 
 				for (unode *x : path) {
-					cout << "\t" << F2.str_subtree(x) << endl;
+					Rcout << "\t" << F2.str_subtree(x) << endl;
 				}
-				cout << endl;
+				Rcout << endl;
 			)
 			debug(
-				cout << "pendants: " << endl;
+				Rcout << "pendants: " << endl;
 				for (auto p : pendants) {
-					cout << "\t" << F2.str_subtree(F2.get_node(p.first)) << "\t" << F2.str_subtree(F2.get_node(p.second)) << endl;
+					Rcout << "\t" << F2.str_subtree(F2.get_node(p.first)) << "\t" << F2.str_subtree(F2.get_node(p.second)) << endl;
 				}
-				cout << endl;
+				Rcout << endl;
 			)
 
 			bool cut_a = true;
@@ -770,7 +770,7 @@ int tbr_distance_hlpr(uforest &F1, uforest &F2, int k, nodemapping &twins,
 			if (cut_a) {
 				pair <int, int> e_a = make_pair(F2_a->get_label(), F2_a->get_parent()->get_label());
 
-				debug(cout  << "cut e_a" << endl);
+				debug(Rcout  << "cut e_a" << endl);
 
 				// copy the trees
 				uforest F1_copy = uforest(F1);
@@ -781,28 +781,28 @@ int tbr_distance_hlpr(uforest &F1, uforest &F2, int k, nodemapping &twins,
 				map<int,int> sibling_pairs_copy = map<int, int>(sibling_pairs);
 				list<int> singletons_copy = list<int>(singletons);
 
-				debug(cout << F2_copy << endl);
+				debug(Rcout << F2_copy << endl);
 				int first_label = e_a.first;
 				int second_label = e_a.second;
 				pair<int,int> components = F2_copy.cut_edge(first_label, second_label);
 				update_nodemapping(twins_copy, F2_copy, first_label, components.first, false);
 				update_nodemapping(twins_copy, F2_copy, second_label, components.second, false);
 				debug(
-					cout << F2_copy << endl;
-					cout << components.first << endl;
-					cout << F2_copy.get_node(components.first) << endl;
-					cout << components.second<< endl;
-					cout << F2_copy.get_node(components.second) << endl;
+					Rcout << F2_copy << endl;
+					Rcout << components.first << endl;
+					Rcout << F2_copy.get_node(components.first) << endl;
+					Rcout << components.second<< endl;
+					Rcout << F2_copy.get_node(components.second) << endl;
 				)
 				// check for singleton
-				debug(cout << "checking if " << F2_copy.str_subtree(F2_copy.get_node(components.first)) << " is a singleton" << endl);
+				debug(Rcout << "checking if " << F2_copy.str_subtree(F2_copy.get_node(components.first)) << " is a singleton" << endl);
 				if (F2_copy.get_node(components.first)->is_singleton()) {
-					debug(cout << "it is" << endl);
+					debug(Rcout << "it is" << endl);
 					singletons_copy.push_back(components.first);
 				}
-				debug(cout << "checking if " << F2_copy.str_subtree(F2_copy.get_node(components.second)) << " is a singleton" << endl);
+				debug(Rcout << "checking if " << F2_copy.str_subtree(F2_copy.get_node(components.second)) << " is a singleton" << endl);
 				if (F2_copy.get_node(components.second)->is_singleton()) {
-					debug(cout << "it is" << endl);
+					debug(Rcout << "it is" << endl);
 					singletons_copy.push_back(components.second);
 				}
 				int branch_a = tbr_distance_hlpr(F1_copy, F2_copy, k-1, twins_copy, sibling_pairs_copy, singletons_copy, t, func_pointer, &MAF1_copy, &MAF2_copy);
@@ -836,7 +836,7 @@ int tbr_distance_hlpr(uforest &F1, uforest &F2, int k, nodemapping &twins,
 			if (cut_c) {
 				pair <int, int> e_c = make_pair(F2_c->get_label(), F2_c->get_parent()->get_label());
 
-				debug(cout  << "cut e_c: " << F2.str_subtree(F2_c) << endl);
+				debug(Rcout  << "cut e_c: " << F2.str_subtree(F2_c) << endl);
 
 				// copy the trees
 				uforest F1_copy = uforest(F1);
@@ -847,7 +847,7 @@ int tbr_distance_hlpr(uforest &F1, uforest &F2, int k, nodemapping &twins,
 				map<int, int> sibling_pairs_copy = map<int, int>(sibling_pairs);
 				list<int> singletons_copy = list<int>(singletons);
 
-				debug(cout << F2_copy << endl);
+				debug(Rcout << F2_copy << endl);
 				int first_label = e_c.first;
 				int second_label = e_c.second;
 				pair<int,int> components = F2_copy.cut_edge(first_label, second_label);
@@ -856,7 +856,7 @@ int tbr_distance_hlpr(uforest &F1, uforest &F2, int k, nodemapping &twins,
 				if (OPTIMIZE_PROTECT_A) {
 					F2_copy.get_node(F2_a->get_label())->set_protected(true);
 				}
-				debug(cout << F2_copy << endl);
+				debug(Rcout << F2_copy << endl);
 				if (F2_copy.get_node(components.first)->is_singleton()) {
 					singletons_copy.push_back(components.first);
 				}
@@ -892,9 +892,9 @@ int tbr_distance_hlpr(uforest &F1, uforest &F2, int k, nodemapping &twins,
 
 			// Cut each F2_b but one, for each possible choice
 			if (cut_b) {
-				debug(cout << "k=" << k << endl);
+				debug(Rcout << "k=" << k << endl);
 				for (int i = 0; i < num_pendants; i++) {
-					debug(cout << "cut e_b except for e_{b_" << i << "}" << endl);
+					debug(Rcout << "cut e_b except for e_{b_" << i << "}" << endl);
 					bool valid = true;
 
 					// copy the trees
@@ -908,12 +908,12 @@ int tbr_distance_hlpr(uforest &F1, uforest &F2, int k, nodemapping &twins,
 					sibling_pairs_copy.insert(make_pair(F1_c->get_label(), F1_a->get_label()));
 					list<int> singletons_copy = list<int>(singletons);
 
-					debug(cout << F2_copy << endl);
+					debug(Rcout << F2_copy << endl);
 
 					int j = 0;
 					for(pair<int, int> e_b : pendants) {
 						if ( j != i) {
-							debug(cout << "cut e_{b_" << j << "}" << endl);
+							debug(Rcout << "cut e_{b_" << j << "}" << endl);
 							if (OPTIMIZE_PROTECT_A) {
 								unode *x = F2_copy.get_node(e_b.first);
 								unode *y = F2_copy.get_node(e_b.second);
@@ -931,7 +931,7 @@ int tbr_distance_hlpr(uforest &F1, uforest &F2, int k, nodemapping &twins,
 							pair<int,int> components = F2_copy.cut_edge(first_label, second_label);
 							update_nodemapping(twins_copy, F2_copy, first_label, components.first, false);
 							update_nodemapping(twins_copy, F2_copy, second_label, components.second, false);
-							debug(cout << F2_copy << endl);
+							debug(Rcout << F2_copy << endl);
 							if (F2_copy.get_node(components.first)->is_singleton()) {
 								singletons_copy.push_back(components.first);
 							}
@@ -986,7 +986,7 @@ int tbr_distance_hlpr(uforest &F1, uforest &F2, int k, nodemapping &twins,
 			if (false && cut_b) {
 				pair <int, int> e_b = pendants.front();
 
-				debug(cout  << "cut e_b" << endl);
+				debug(Rcout  << "cut e_b" << endl);
 
 				// copy the trees
 				uforest F1_copy = uforest(F1);
@@ -999,13 +999,13 @@ int tbr_distance_hlpr(uforest &F1, uforest &F2, int k, nodemapping &twins,
 				sibling_pairs_copy.insert(make_pair(F1_c->get_label(), F1_a->get_label()));
 				list<int> singletons_copy = list<int>(singletons);
 
-				debug(cout << F2_copy << endl);
+				debug(Rcout << F2_copy << endl);
 				int first_label = e_b.first;
 				int second_label = e_b.second;
 				pair<int,int> components = F2_copy.cut_edge(first_label, second_label);
 				update_nodemapping(twins_copy, F2_copy, first_label, components.first, false);
 				update_nodemapping(twins_copy, F2_copy, second_label, components.second, false);
-				debug(cout << F2_copy << endl);
+				debug(Rcout << F2_copy << endl);
 				if (F2_copy.get_node(components.first)->is_singleton()) {
 					singletons_copy.push_back(components.first);
 				}
@@ -1042,7 +1042,7 @@ int tbr_distance_hlpr(uforest &F1, uforest &F2, int k, nodemapping &twins,
 			if (false && cut_b) {
 				pair <int, int> e_d = pendants.back();
 
-				debug(cout  << "cut e_d" << endl);
+				debug(Rcout  << "cut e_d" << endl);
 
 				// copy the trees
 				uforest F1_copy = uforest(F1);
@@ -1055,14 +1055,14 @@ int tbr_distance_hlpr(uforest &F1, uforest &F2, int k, nodemapping &twins,
 				sibling_pairs_copy.insert(make_pair(F1_c->get_label(), F1_a->get_label()));
 				list<int> singletons_copy = list<int>(singletons);
 
-				debug(cout << F2_copy << endl);
+				debug(Rcout << F2_copy << endl);
 				int first_label = e_d.first;
 				int second_label = e_d.second;
 				pair<int,int> components = F2_copy.cut_edge(first_label, second_label);
 				update_nodemapping(twins_copy, F2_copy, first_label, components.first, false);
 				update_nodemapping(twins_copy, F2_copy, second_label, components.second, false);
 
-				debug(cout << F2_copy << endl);
+				debug(Rcout << F2_copy << endl);
 				if (F2_copy.get_node(components.first)->is_singleton()) {
 					singletons_copy.push_back(components.first);
 				}
@@ -1125,9 +1125,9 @@ int tbr_distance_hlpr(uforest &F1, uforest &F2, int k, nodemapping &twins,
 		// note: need to maintain component representatives when cutting and merging (initially smallest leaf)
 
 	debug(
-		cout << "ANSWER FOUND" << endl;
-		cout << "\t" << F1.str() << endl;
-		cout << "\t" << F2.str() << endl;
+		Rcout << "ANSWER FOUND" << endl;
+		Rcout << "\t" << F1.str() << endl;
+		Rcout << "\t" << F2.str() << endl;
 	)
 	int ret_k = k;
 	// cleanup the forests
@@ -1219,14 +1219,14 @@ int tbr_approx(uforest &T1, uforest &T2, bool low) {
 	distances_from_leaf_decorator(F1, F1.get_smallest_leaf());
 	distances_from_leaf_decorator(F2, F2.get_smallest_leaf());
 	debug_approx(
-		cout << endl << F1 << endl;
+		Rcout << endl << F1 << endl;
 		for(int i : F1.find_leaves()) {
-			cout << i << ": " << F1.get_node(i)->get_distance() << endl;
+			Rcout << i << ": " << F1.get_node(i)->get_distance() << endl;
 		}
 
-		cout << F2 << endl;
+		Rcout << F2 << endl;
 		for(int i : F2.find_leaves()) {
-			cout << i << ": " << F2.get_node(i)->get_distance() << endl;
+			Rcout << i << ": " << F2.get_node(i)->get_distance() << endl;
 		}
 	)
 
@@ -1241,7 +1241,7 @@ int tbr_approx(uforest &T1, uforest &T2, bool low) {
 
 int tbr_approx_hlpr(uforest &F1, uforest &F2, int k, nodemapping &twins, map<int, int> &sibling_pairs, list<int> &singletons) {
 
-	debug_approx(cout << "tbr_approx_hlpr(" << k << ")" << endl);
+	debug_approx(Rcout << "tbr_approx_hlpr(" << k << ")" << endl);
   Rcpp::checkUserInterrupt();
 
 	while (!sibling_pairs.empty() || !singletons.empty()) {
@@ -1249,17 +1249,17 @@ int tbr_approx_hlpr(uforest &F1, uforest &F2, int k, nodemapping &twins, map<int
 		// Case 1 : Isolated Subtree
 		while (!singletons.empty()) {
 
-			debug_approx(cout << "Case 1" << endl);
+			debug_approx(Rcout << "Case 1" << endl);
 
 			unode *F2_a = F2.get_node(singletons.front());
 			singletons.pop_front();
 			unode *F1_a = F1.get_node(twins.get_backward(F2_a->get_label()));
 			debug_approx(
-				cout << "F1: " << F1.str() << endl;
-				cout << "F1_a: " << F1.str_subtree(F1_a) << endl;
+				Rcout << "F1: " << F1.str() << endl;
+				Rcout << "F1_a: " << F1.str_subtree(F1_a) << endl;
 
-				cout << "F2: " << F2.str() << endl;
-				cout << "F2_a: " << F2.str_subtree(F2_a) << endl;
+				Rcout << "F2: " << F2.str() << endl;
+				Rcout << "F2_a: " << F2.str_subtree(F2_a) << endl;
 			)
 
 			// remove from sibling pairs if necessary
@@ -1273,7 +1273,7 @@ int tbr_approx_hlpr(uforest &F1, uforest &F2, int k, nodemapping &twins, map<int
 				sibling_pairs.erase(spi->first);
 			}
 
-			debug_approx(cout << F1 << endl);
+			debug_approx(Rcout << F1 << endl);
 
 			if (F1_a->get_parent() == NULL) {
 				continue;
@@ -1286,15 +1286,15 @@ int tbr_approx_hlpr(uforest &F1, uforest &F2, int k, nodemapping &twins, map<int
 
 
 
-			debug_approx(cout << F1 << endl);
+			debug_approx(Rcout << F1 << endl);
 
 			// check for new sibling pair
 			debug_approx(
-				cout << F1.str_subtree(F1.get_node(components.first)) << endl;
-				cout << F1.str_subtree(F1.get_node(components.second)) << endl;
-//			cout << F1_new_terminal->get_parent()->get_distance() << endl;
-//			cout << F1_new_terminal->get_distance() << endl;
-				cout << "checking for sibling pair" << endl;
+				Rcout << F1.str_subtree(F1.get_node(components.first)) << endl;
+				Rcout << F1.str_subtree(F1.get_node(components.second)) << endl;
+//			Rcout << F1_new_terminal->get_parent()->get_distance() << endl;
+//			Rcout << F1_new_terminal->get_distance() << endl;
+				Rcout << "checking for sibling pair" << endl;
 			)
 
 			// check for sibling pair
@@ -1308,10 +1308,10 @@ int tbr_approx_hlpr(uforest &F1, uforest &F2, int k, nodemapping &twins, map<int
 				}
 			}
 			int i = new_sibling_pair.size();
-			debug_approx(cout << new_sibling_pair.size() << endl);
+			debug_approx(Rcout << new_sibling_pair.size() << endl);
 			if (i >= 2) {
 				if (sibling_pairs.find(new_sibling_pair[i-1]) == sibling_pairs.end() && sibling_pairs.find(new_sibling_pair[i-2]) == sibling_pairs.end()) {
-					debug_approx(cout << "sibling_pair found" << endl);
+					debug_approx(Rcout << "sibling_pair found" << endl);
 					sibling_pairs.insert(make_pair(new_sibling_pair[i-2], new_sibling_pair[i-1]));
 					sibling_pairs.insert(make_pair(new_sibling_pair[i-1], new_sibling_pair[i-2]));
 				}
@@ -1324,9 +1324,9 @@ int tbr_approx_hlpr(uforest &F1, uforest &F2, int k, nodemapping &twins, map<int
 		}
 
 		debug_approx(
-			cout << "sibling pairs: " << sibling_pairs.size() << endl;
+			Rcout << "sibling pairs: " << sibling_pairs.size() << endl;
 			for (pair<int, int> p: sibling_pairs) {
-				cout << p.first << ", " << p.second << endl;
+				Rcout << p.first << ", " << p.second << endl;
 			}
 		)
 
@@ -1357,14 +1357,14 @@ int tbr_approx_hlpr(uforest &F1, uforest &F2, int k, nodemapping &twins, map<int
 		}
 
 		debug_approx(
-			cout << "F1: " << F1.str() << endl;
-			cout << "F1_a: " << F1.str_subtree(F1_a) << endl;
-			cout << "F1_c: " << F1.str_subtree(F1_c) << endl;
+			Rcout << "F1: " << F1.str() << endl;
+			Rcout << "F1_a: " << F1.str_subtree(F1_a) << endl;
+			Rcout << "F1_c: " << F1.str_subtree(F1_c) << endl;
 
 
-			cout << "F2: " << F2.str() << endl;
-			cout << "F2_a: " << F2.str_subtree(F2_a) << endl;
-			cout << "F2_c: " << F2.str_subtree(F2_c) << endl;
+			Rcout << "F2: " << F2.str() << endl;
+			Rcout << "F2_a: " << F2.str_subtree(F2_a) << endl;
+			Rcout << "F2_c: " << F2.str_subtree(F2_c) << endl;
 		)
 
 
@@ -1377,12 +1377,12 @@ int tbr_approx_hlpr(uforest &F1, uforest &F2, int k, nodemapping &twins, map<int
 				F2_a->get_parent() == F2_c ||
 				F2_c->get_parent() == F2_a) {
 
-			debug_approx(cout << "Case 2" << endl);
+			debug_approx(Rcout << "Case 2" << endl);
 
 			// make terminal in F1
 			// contract F1_a and F1_c
 			unode *F1_new_terminal = F1_a->get_parent();
-			debug_approx(cout << "F1_new_terminal: " << F1.str_subtree(F1_new_terminal) << endl);
+			debug_approx(Rcout << "F1_new_terminal: " << F1.str_subtree(F1_new_terminal) << endl);
 			F1_new_terminal->set_terminal(true);
 			F1_new_terminal->contract_neighbor(F1_a);
 			F1_new_terminal->contract_neighbor(F1_c);
@@ -1416,8 +1416,8 @@ int tbr_approx_hlpr(uforest &F1, uforest &F2, int k, nodemapping &twins, map<int
 			// make terminal in F2
 			// contract F2_a and F2_c
 			debug_approx(
-				cout << "d(F2_a): " << F2_a->get_distance() << endl;
-				cout << "d(F2_c): " << F2_c->get_distance() << endl;
+				Rcout << "d(F2_a): " << F2_a->get_distance() << endl;
+				Rcout << "d(F2_c): " << F2_c->get_distance() << endl;
 			)
 			unode *F2_new_terminal = F2_a->get_parent();
 			if (F2_c->get_parent() == F2_a &&
@@ -1454,7 +1454,7 @@ int tbr_approx_hlpr(uforest &F1, uforest &F2, int k, nodemapping &twins, map<int
 		}
 
 		else if (F2_a->get_parent() == F2_c) {
-			debug_approx(cout << "Case 2.5" << endl);
+			debug_approx(Rcout << "Case 2.5" << endl);
 		}
 
 		// TODO: 2.5 where (F2_c->get_parent() == F2_a) ?
@@ -1463,7 +1463,7 @@ int tbr_approx_hlpr(uforest &F1, uforest &F2, int k, nodemapping &twins, map<int
 
 		else {
 
-			debug_approx(cout << "Case 3" << endl);
+			debug_approx(Rcout << "Case 3" << endl);
 
 			// to avoid finding the pendant edges between a and c, note that cutting any two neighbors of p_a / p_c results in the same forest
 
@@ -1503,30 +1503,30 @@ int tbr_approx_hlpr(uforest &F1, uforest &F2, int k, nodemapping &twins, map<int
 			if (cut_a) {
 				pair <int, int> e_a = make_pair(F2_a->get_label(), F2_a->get_parent()->get_label());
 
-				debug_approx(cout  << "cut e_a" << endl);
+				debug_approx(Rcout  << "cut e_a" << endl);
 
-				debug_approx(cout << F2 << endl;)
+				debug_approx(Rcout << F2 << endl;)
 				int first_label = e_a.first;
 				int second_label = e_a.second;
 				pair<int,int> components = F2.cut_edge(first_label, second_label);
 				update_nodemapping(twins, F2, first_label, components.first, false);
 				update_nodemapping(twins, F2, second_label, components.second, false);
 				debug_approx(
-					cout << F2 << endl;
-					cout << components.first << endl;
-					cout << F2.get_node(components.first) << endl;
-					cout << components.second<< endl;
-					cout << F2.get_node(components.second) << endl;
+					Rcout << F2 << endl;
+					Rcout << components.first << endl;
+					Rcout << F2.get_node(components.first) << endl;
+					Rcout << components.second<< endl;
+					Rcout << F2.get_node(components.second) << endl;
 				)
 				// check for singleton
-				debug_approx(cout << "checking if " << F2.str_subtree(F2.get_node(components.first)) << " is a singleton" << endl);
+				debug_approx(Rcout << "checking if " << F2.str_subtree(F2.get_node(components.first)) << " is a singleton" << endl);
 				if (F2.get_node(components.first)->is_singleton()) {
-					debug_approx(cout << "it is" << endl);
+					debug_approx(Rcout << "it is" << endl);
 					singletons.push_back(components.first);
 				}
-				debug_approx(cout << "checking if " << F2.str_subtree(F2.get_node(components.second)) << " is a singleton" << endl);
+				debug_approx(Rcout << "checking if " << F2.str_subtree(F2.get_node(components.second)) << " is a singleton" << endl);
 				if (F2.get_node(components.second)->is_singleton()) {
-					debug_approx(cout << "it is" << endl);
+					debug_approx(Rcout << "it is" << endl);
 					singletons.push_back(components.second);
 				}
 
@@ -1536,30 +1536,30 @@ int tbr_approx_hlpr(uforest &F1, uforest &F2, int k, nodemapping &twins, map<int
 			if (cut_c) {
 				pair <int, int> e_c = make_pair(F2_c->get_label(), F2_c->get_parent()->get_label());
 
-				debug_approx(cout  << "cut e_c" << endl);
+				debug_approx(Rcout  << "cut e_c" << endl);
 
-				debug_approx(cout << F2 << endl;)
+				debug_approx(Rcout << F2 << endl;)
 				int first_label = e_c.first;
 				int second_label = e_c.second;
 				pair<int,int> components = F2.cut_edge(first_label, second_label);
 				update_nodemapping(twins, F2, first_label, components.first, false);
 				update_nodemapping(twins, F2, second_label, components.second, false);
 				debug_approx(
-					cout << F2 << endl;
-					cout << components.first << endl;
-					cout << F2.get_node(components.first) << endl;
-					cout << components.second<< endl;
-					cout << F2.get_node(components.second) << endl;
+					Rcout << F2 << endl;
+					Rcout << components.first << endl;
+					Rcout << F2.get_node(components.first) << endl;
+					Rcout << components.second<< endl;
+					Rcout << F2.get_node(components.second) << endl;
 				)
 				// check for singleton
-				debug_approx(cout << "checking if " << F2.str_subtree(F2.get_node(components.first)) << " is a singleton" << endl);
+				debug_approx(Rcout << "checking if " << F2.str_subtree(F2.get_node(components.first)) << " is a singleton" << endl);
 				if (F2.get_node(components.first)->is_singleton()) {
-					debug_approx(cout << "it is" << endl);
+					debug_approx(Rcout << "it is" << endl);
 					singletons.push_back(components.first);
 				}
-				debug_approx(cout << "checking if " << F2.str_subtree(F2.get_node(components.second)) << " is a singleton" << endl);
+				debug_approx(Rcout << "checking if " << F2.str_subtree(F2.get_node(components.second)) << " is a singleton" << endl);
 				if (F2.get_node(components.second)->is_singleton()) {
-					debug_approx(cout << "it is" << endl);
+					debug_approx(Rcout << "it is" << endl);
 					singletons.push_back(components.second);
 				}
 
@@ -1578,32 +1578,32 @@ int tbr_approx_hlpr(uforest &F1, uforest &F2, int k, nodemapping &twins, map<int
 				}
 				pair <int, int> e_b = make_pair(F2_b1->get_label(), F2_b2->get_label());
 
-				debug_approx(cout  << "cut e_b" << endl);
+				debug_approx(Rcout  << "cut e_b" << endl);
 
-				debug_approx(cout << F2 << endl;)
+				debug_approx(Rcout << F2 << endl;)
 				int first_label = e_b.first;
 				int second_label = e_b.second;
 				pair<int,int> components = F2.cut_edge(first_label, second_label);
 				update_nodemapping(twins, F2, first_label, components.first, false);
 				update_nodemapping(twins, F2, second_label, components.second, false);
-				debug_approx(cout << F2 << endl;)
+				debug_approx(Rcout << F2 << endl;)
 
 				if (components.first != -1 && components.second != -1) {
 					debug_approx(
-						cout << components.first << endl;
-						cout << F2.get_node(components.first) << endl;
-						cout << components.second<< endl;
-						cout << F2.get_node(components.second) << endl;
+						Rcout << components.first << endl;
+						Rcout << F2.get_node(components.first) << endl;
+						Rcout << components.second<< endl;
+						Rcout << F2.get_node(components.second) << endl;
 					)
 					// check for singleton
-					debug_approx(cout << "checking if " << F2.str_subtree(F2.get_node(components.first)) << " is a singleton" << endl);
+					debug_approx(Rcout << "checking if " << F2.str_subtree(F2.get_node(components.first)) << " is a singleton" << endl);
 					if (F2.get_node(components.first)->is_singleton()) {
-						debug_approx(cout << "it is" << endl);
+						debug_approx(Rcout << "it is" << endl);
 						singletons.push_back(components.first);
 					}
-					debug_approx(cout << "checking if " << F2.str_subtree(F2.get_node(components.second)) << " is a singleton" << endl);
+					debug_approx(Rcout << "checking if " << F2.str_subtree(F2.get_node(components.second)) << " is a singleton" << endl);
 					if (F2.get_node(components.second)->is_singleton()) {
-						debug_approx(cout << "it is" << endl);
+						debug_approx(Rcout << "it is" << endl);
 						singletons.push_back(components.second);
 					}
 				}
@@ -1612,32 +1612,32 @@ int tbr_approx_hlpr(uforest &F1, uforest &F2, int k, nodemapping &twins, map<int
 			if (cut_d) {
 				pair <int, int> e_d = make_pair(F2_d1->get_label(), F2_d2->get_label());
 
-				debug_approx(cout  << "cut e_d" << endl);
+				debug_approx(Rcout  << "cut e_d" << endl);
 
-				debug_approx(cout << F2 << endl;)
+				debug_approx(Rcout << F2 << endl;)
 				int first_label = e_d.first;
 				int second_label = e_d.second;
 				pair<int,int> components = F2.cut_edge(first_label, second_label);
 				update_nodemapping(twins, F2, first_label, components.first, false);
 				update_nodemapping(twins, F2, second_label, components.second, false);
-				debug_approx(cout << F2 << endl;)
+				debug_approx(Rcout << F2 << endl;)
 
 				if (components.first != -1 && components.second != -1) {
 					debug_approx(
-						cout << components.first << endl;
-						cout << F2.get_node(components.first) << endl;
-						cout << components.second<< endl;
-						cout << F2.get_node(components.second) << endl;
+						Rcout << components.first << endl;
+						Rcout << F2.get_node(components.first) << endl;
+						Rcout << components.second<< endl;
+						Rcout << F2.get_node(components.second) << endl;
 					)
 					// check for singleton
-					debug_approx(cout << "checking if " << F2.str_subtree(F2.get_node(components.first)) << " is a singleton" << endl);
+					debug_approx(Rcout << "checking if " << F2.str_subtree(F2.get_node(components.first)) << " is a singleton" << endl);
 					if (F2.get_node(components.first)->is_singleton()) {
-						debug_approx(cout << "it is" << endl);
+						debug_approx(Rcout << "it is" << endl);
 						singletons.push_back(components.first);
 					}
-					debug_approx(cout << "checking if " << F2.str_subtree(F2.get_node(components.second)) << " is a singleton" << endl);
+					debug_approx(Rcout << "checking if " << F2.str_subtree(F2.get_node(components.second)) << " is a singleton" << endl);
 					if (F2.get_node(components.second)->is_singleton()) {
-						debug_approx(cout << "it is" << endl);
+						debug_approx(Rcout << "it is" << endl);
 						singletons.push_back(components.second);
 					}
 				}
@@ -1647,15 +1647,15 @@ int tbr_approx_hlpr(uforest &F1, uforest &F2, int k, nodemapping &twins, map<int
 	}
 
 	debug_approx(
-		cout << "ANSWER FOUND" << endl;
-		cout << "\t" << F1.str() << endl;
-		cout << "\t" << F2.str() << endl;
+		Rcout << "ANSWER FOUND" << endl;
+		Rcout << "\t" << F1.str() << endl;
+		Rcout << "\t" << F2.str() << endl;
 	)
 	return k;
 }
 
 list<pair<int,int> > find_pendants(unode *a, unode *c) {
-	debug(cout << "find_pendants()" << endl);
+	debug(Rcout << "find_pendants()" << endl);
 
 	list<pair<int,int> > pendants = list<pair<int,int> >();
 	list<unode *> path = list<unode *>();
@@ -1715,39 +1715,39 @@ int replug_hlpr(uforest &F1, uforest &F2, nodemapping &twins, int k, pair<ufores
 	int kprime = F1.num_components()-1;
 
 	debug_replug(
-		cout << endl << "REPLUG_HLPR" << endl;
-		cout << "\t" << "k:  " << k << endl;
-		cout << "\t" << "T1: " << T1 << endl;
-		cout << "\t" << "T1: " << T1.str(true) << endl;
-		cout << "\t" << "T2: " << T2 << endl;
-		cout << "\t" << "T2: " << T2.str(true) << endl;
-		cout << "\t" << "F1: " << F1.str() << endl;
-		cout << "\t" << "F1: " << F1.str(true) << endl;
-		cout << "\t" << "F2: " << F2.str() << endl;
-		cout << "\t" << "F2: " << F2.str(true) << endl;
+		Rcout << endl << "REPLUG_HLPR" << endl;
+		Rcout << "\t" << "k:  " << k << endl;
+		Rcout << "\t" << "T1: " << T1 << endl;
+		Rcout << "\t" << "T1: " << T1.str(true) << endl;
+		Rcout << "\t" << "T2: " << T2 << endl;
+		Rcout << "\t" << "T2: " << T2.str(true) << endl;
+		Rcout << "\t" << "F1: " << F1.str() << endl;
+		Rcout << "\t" << "F1: " << F1.str(true) << endl;
+		Rcout << "\t" << "F2: " << F2.str() << endl;
+		Rcout << "\t" << "F2: " << F2.str(true) << endl;
 
-		cout << "\t" << "F1 num: nodemapping (distance)" << endl;
+		Rcout << "\t" << "F1 num: nodemapping (distance)" << endl;
 		for (unode *i: F1.get_node_list()) {
-			cout << "\t\t";
-			cout << i->get_label();
-			cout << ": ";
-			cout << twins.get_forward(i->get_label());
-			cout << "  (";
-			cout << i->get_distance();
-			cout << ")";
-			cout << endl;
+			Rcout << "\t\t";
+			Rcout << i->get_label();
+			Rcout << ": ";
+			Rcout << twins.get_forward(i->get_label());
+			Rcout << "  (";
+			Rcout << i->get_distance();
+			Rcout << ")";
+			Rcout << endl;
 		}
 
-		cout << "\t" << "F2 num: nodemapping (distance)" << endl;
+		Rcout << "\t" << "F2 num: nodemapping (distance)" << endl;
 		for (unode *i: F2.get_node_list()) {
-			cout << "\t\t";
-			cout << i->get_label();
-			cout << ": ";
-			cout << twins.get_backward(i->get_label());
-			cout << "  (";
-			cout << i->get_distance();
-			cout << ")";
-			cout << endl;
+			Rcout << "\t\t";
+			Rcout << i->get_label();
+			Rcout << ": ";
+			Rcout << twins.get_backward(i->get_label());
+			Rcout << "  (";
+			Rcout << i->get_distance();
+			Rcout << ")";
+			Rcout << endl;
 		}
 	)
 
@@ -1783,9 +1783,9 @@ int replug_hlpr(uforest &F1, uforest &F2, nodemapping &twins, int k, pair<ufores
 	list <socket *> T1_socketlist = list<socket *>();
 	list <socket *> T2_socketlist = list<socket *>();
 
-	debug_sockets(cout << "finding T1 sockets" << endl;)
+	debug_sockets(Rcout << "finding T1 sockets" << endl;)
 	find_sockets(T1, F1, T1_socketlist);
-	debug_sockets(cout << "finding T2 sockets" << endl;)
+	debug_sockets(Rcout << "finding T2 sockets" << endl;)
 	find_sockets(T2, F2, T2_socketlist);
 
 	socketcontainer T1_sockets = socketcontainer(T1_socketlist);
@@ -1800,16 +1800,16 @@ int replug_hlpr(uforest &F1, uforest &F2, nodemapping &twins, int k, pair<ufores
 	}
 
 	debug_replug(
-		cout << "T1 sockets: " << endl;
+		Rcout << "T1 sockets: " << endl;
 		for (socket *s: T1_socketlist) {
-			cout << "\t" << s->str() << endl;
+			Rcout << "\t" << s->str() << endl;
 		}
-		cout << endl;
-		cout << "T2 sockets: " << endl;
+		Rcout << endl;
+		Rcout << "T2 sockets: " << endl;
 		for (socket *s: T2_socketlist) {
-			cout << "\t" << s->str() << endl;
+			Rcout << "\t" << s->str() << endl;
 		}
-		cout << endl;
+		Rcout << endl;
 	)
 
 	// 3. Map dead nodes (not alive or sockets)
@@ -1832,19 +1832,19 @@ int replug_hlpr(uforest &F1, uforest &F2, nodemapping &twins, int k, pair<ufores
 
 	// test node status
 	debug_replug(
-		cout << "T1 node status" << endl;
+		Rcout << "T1 node status" << endl;
 		for (unode *n : T1.get_node_list()) {
-			cout << n->get_label() << ": " <<
+			Rcout << n->get_label() << ": " <<
 				nodestatus_name[T1_status[n->get_label()]] << endl;
 		}
-		cout << endl;
+		Rcout << endl;
 
-		cout << "T2 node status" << endl;
+		Rcout << "T2 node status" << endl;
 		for (unode *n : T2.get_node_list()) {
-			cout << n->get_label() << ": " <<
+			Rcout << n->get_label() << ": " <<
 				nodestatus_name[T2_status[n->get_label()]] << endl;
 		}
-		cout << endl;
+		Rcout << endl;
 	)
 
 
@@ -1862,7 +1862,7 @@ int replug_hlpr(uforest &F1, uforest &F2, nodemapping &twins, int k, pair<ufores
 	// test dead components
 	int i = 0;
 	debug_replug(
-		cout << "T1 dead components" << endl;
+		Rcout << "T1 dead components" << endl;
 	)
 		for(list<int> &l : T1_dead_components) {
 			int size = l.size();
@@ -1871,12 +1871,12 @@ int replug_hlpr(uforest &F1, uforest &F2, nodemapping &twins, int k, pair<ufores
 			}
 			debug_replug(
 				i++;
-				cout << "\t" << i << ":" << endl;
-				cout << "\t\t";
+				Rcout << "\t" << i << ":" << endl;
+				Rcout << "\t\t";
 				for (int x : l) {
-					cout << x << ",";
+					Rcout << x << ",";
 				}
-				cout << endl;
+				Rcout << endl;
 			)
 		}
 		if (max_dead_component_extra_sockets < temp_dead_component_extra_sockets) {
@@ -1884,7 +1884,7 @@ int replug_hlpr(uforest &F1, uforest &F2, nodemapping &twins, int k, pair<ufores
 		}
 
 		i = 0;
-		debug_replug(cout << "T2 dead components" << endl;)
+		debug_replug(Rcout << "T2 dead components" << endl;)
 		for(list<int> &l : T2_dead_components) {
 			int size = l.size();
 			if (size > 2) {
@@ -1892,12 +1892,12 @@ int replug_hlpr(uforest &F1, uforest &F2, nodemapping &twins, int k, pair<ufores
 			}
 			debug_replug(
 				i++;
-				cout << "\t" << i << ":" << endl;
-				cout << "\t\t";
+				Rcout << "\t" << i << ":" << endl;
+				Rcout << "\t\t";
 				for (int x : l) {
-					cout << x << ",";
+					Rcout << x << ",";
 				}
-				cout << endl;
+				Rcout << endl;
 			)
 		}
 		if (max_dead_component_extra_sockets < temp_dead_component_extra_sockets) {
@@ -1928,9 +1928,9 @@ int replug_hlpr(uforest &F1, uforest &F2, nodemapping &twins, int k, pair<ufores
 		vector <socket *> &T1_group = socketgroup.second;
 		vector <socket *> &T2_group = T2_sockets_normalized.find(start, end);
 		debug_replug(
-			cout << "socket group " << i << ": " << start << ", " << end << endl;
-			cout << "\t" << "T1: " << T1_group.size() << endl;
-			cout << "\t" << "T2: " << T2_group.size() << endl;
+			Rcout << "socket group " << i << ": " << start << ", " << end << endl;
+			Rcout << "\t" << "T1: " << T1_group.size() << endl;
+			Rcout << "\t" << "T2: " << T2_group.size() << endl;
 		)
 		if (T1_group.size() < T2_group.size()) {
 			max_sockets += T1_group.size();
@@ -1944,7 +1944,7 @@ int replug_hlpr(uforest &F1, uforest &F2, nodemapping &twins, int k, pair<ufores
 	}
 
 	debug_replug(
-		cout << socketcandidates.size() << " socket groups " << endl;
+		Rcout << socketcandidates.size() << " socket groups " << endl;
 	)
 
 	// consider the number of sockets a dead component can add. TODO: better estimate that doesn't count some sockets twice
@@ -1956,8 +1956,8 @@ int replug_hlpr(uforest &F1, uforest &F2, nodemapping &twins, int k, pair<ufores
 		lower_bound = 0;
 	}
 	debug_replug(
-		cout << "lower_bound: " << lower_bound + kprime << endl;
-		cout << "allowed: " << k + kprime << endl;
+		Rcout << "lower_bound: " << lower_bound + kprime << endl;
+		Rcout << "allowed: " << k + kprime << endl;
 	)
 
 	if (lower_bound > k) {
@@ -1983,19 +1983,19 @@ int replug_hlpr(uforest &F1, uforest &F2, nodemapping &twins, int k, pair<ufores
 	}
 
 	debug_replug(
-		cout << endl;
-		cout << "F1 refresher:" << F1.str(true) << endl;
-		cout << "F2 refresher:" << F2.str(true) << endl;
-		cout << endl;
+		Rcout << endl;
+		Rcout << "F1 refresher:" << F1.str(true) << endl;
+		Rcout << "F2 refresher:" << F2.str(true) << endl;
+		Rcout << endl;
 
-		cout << "F1 phi-nodes to add:" << endl;
+		Rcout << "F1 phi-nodes to add:" << endl;
 		for(pair<pair<int, int>, int> phi_node_count : F1_add_phi_nodes) {
-			cout << "\t" << phi_node_count.first.first << ", " << phi_node_count.first.second << ": " << phi_node_count.second << endl;
+			Rcout << "\t" << phi_node_count.first.first << ", " << phi_node_count.first.second << ": " << phi_node_count.second << endl;
 		}
 
-		cout << "F2 phi-nodes to add:" << endl;
+		Rcout << "F2 phi-nodes to add:" << endl;
 		for(pair<pair<int, int>, int> phi_node_count : F2_add_phi_nodes) {
-			cout << "\t" << phi_node_count.first.first << ", " << phi_node_count.first.second << ": " << phi_node_count.second << endl;
+			Rcout << "\t" << phi_node_count.first.first << ", " << phi_node_count.first.second << ": " << phi_node_count.second << endl;
 		}
 	)
 
@@ -2003,8 +2003,8 @@ int replug_hlpr(uforest &F1, uforest &F2, nodemapping &twins, int k, pair<ufores
 	add_phi_nodes(F2, F2_add_phi_nodes);
 
 	debug_replug(
-		cout << "F1: " << F1.str() << endl;
-		cout << "F2: " << F1.str() << endl;
+		Rcout << "F1: " << F1.str() << endl;
+		Rcout << "F2: " << F1.str() << endl;
 	)
 
 
@@ -2087,9 +2087,9 @@ int check_socket_group_combinations(unsigned int n, unsigned int i, unsigned int
 int check_socket_group_combination(int k, int kprime, socketcontainer &T1_sockets, socketcontainer &T2_sockets_normalized, vector<list<int> > &T1_dead_components, vector<list<int> > &T2_dead_components, vector<pair<vector<socket *> , vector<socket *> > > &socketcandidates, vector<pair<socket *, socket *> > &sockets, vector<pair<socket *, socket *> > &candidate_phi_node_sockets) {
 
 	debug_phi_nodes(
-		cout << candidate_phi_node_sockets.size() << endl;
+		Rcout << candidate_phi_node_sockets.size() << endl;
 		for (pair<socket *, socket *> &p : sockets) {
-				cout << p.first->str() << "\t" << p.second->str() << endl;
+				Rcout << p.first->str() << "\t" << p.second->str() << endl;
 		}
 	)
 
@@ -2142,14 +2142,14 @@ int check_socket_group_combination(int k, int kprime, socketcontainer &T1_socket
 		}
 	}
 	debug_phi_nodes(
-			cout << "preferred_sockets: " << endl;
+			Rcout << "preferred_sockets: " << endl;
 	for (int i = 0; i < sockets.size(); i++) {
-		cout << i+1 << ": ";
+		Rcout << i+1 << ": ";
 		if (preferred_sockets[i]) {
-			cout << "TRUE" << endl;
+			Rcout << "TRUE" << endl;
 		}
 		else {
-			cout << "FALSE" << endl;
+			Rcout << "FALSE" << endl;
 		}
 	}
 	)
@@ -2173,7 +2173,7 @@ int check_socket_group_combination(int k, int kprime, socketcontainer &T1_socket
 		i++;
 	}
 	debug_phi_nodes(
-		cout << "found " << constraints.size() << " constraints" << endl;
+		Rcout << "found " << constraints.size() << " constraints" << endl;
 	)
 
 
@@ -2191,12 +2191,12 @@ int check_socket_group_combination(int k, int kprime, socketcontainer &T1_socket
 		changed_sockets_vector[socket] = true;
 	}
 	debug_phi_nodes(
-		cout << "phi-node sockets:" << endl;
+		Rcout << "phi-node sockets:" << endl;
 	)
 	for (unsigned int i = 0; i < sockets.size(); i++) {
 		if (!changed_sockets_vector[i]) {
 			candidate_phi_node_sockets.push_back(sockets[i]);
-			debug_phi_nodes(cout << sockets[i].first->str() << "\t" << sockets[i].second->str() << endl;)
+			debug_phi_nodes(Rcout << sockets[i].first->str() << "\t" << sockets[i].second->str() << endl;)
 		}
 	}
 
@@ -2207,7 +2207,7 @@ int check_socket_group_combination(int k, int kprime, socketcontainer &T1_socket
 	map<int, list<int>> T1_phi_dead_component_map = map<int, list<int> >();
 	map<int, list<int>> T2_phi_dead_component_map = map<int, list<int> >();
 
-	debug_phi_nodes(cout << "phi-node sockets with potential dead component adds:" << endl;)
+	debug_phi_nodes(Rcout << "phi-node sockets with potential dead component adds:" << endl;)
 	for (pair<socket *, socket *> p : candidate_phi_node_sockets) {
 		int dead_1 = p.first->dead;
 		int dead_2 = p.second->dead;
@@ -2215,7 +2215,7 @@ int check_socket_group_combination(int k, int kprime, socketcontainer &T1_socket
 		map<int, int>::iterator dead_component_2 = T2_socket_dead_component_map.find(dead_2);
 		if (dead_component_1 != T1_socket_dead_component_map.end() &&
 				dead_component_2 != T2_socket_dead_component_map.end()) {
-			debug_phi_nodes(cout << p.first->str() << "\t" << p.second->str() << endl;)
+			debug_phi_nodes(Rcout << p.first->str() << "\t" << p.second->str() << endl;)
 			T1_phi_dead_component_map[dead_component_1->second].push_back(dead_1);
 			T2_phi_dead_component_map[dead_component_2->second].push_back(dead_2);
 		}
@@ -2226,16 +2226,16 @@ int check_socket_group_combination(int k, int kprime, socketcontainer &T1_socket
 
 
 	int extra_phi_nodes = 0;
-	debug_phi_nodes(cout << "checking T2 dead components" << endl;)
+	debug_phi_nodes(Rcout << "checking T2 dead components" << endl;)
 	for (pair<int, list<int> > p : T2_phi_dead_component_map) {
 		int dead_component = p.first;
 		debug_phi_nodes(
-			cout << "dead component " << dead_component << endl;
-			cout << "\t\t";
+			Rcout << "dead component " << dead_component << endl;
+			Rcout << "\t\t";
 			for (int x : T2_dead_components[dead_component]) {
-				cout << x << ",";
+				Rcout << x << ",";
 			}
-			cout << endl;
+			Rcout << endl;
 		)
 		// number of phi nodes in dead component
 		int T2_dead_comp_phi_nodes = 0;
@@ -2252,11 +2252,11 @@ int check_socket_group_combination(int k, int kprime, socketcontainer &T1_socket
 		int remaining_extra_phi_nodes = max_extra_phi_nodes;
 		debug_phi_nodes(
 			if (p.second.size() > 1) {
-				cout << "conflict: " << endl;
+				Rcout << "conflict: " << endl;
 				for (int s : p.second) {
-					cout << "," << s;
+					Rcout << "," << s;
 				}
-				cout << endl;
+				Rcout << endl;
 			}
 		)
 		for (int s : p.second) {
@@ -2282,7 +2282,7 @@ int check_socket_group_combination(int k, int kprime, socketcontainer &T1_socket
 					T1_dead_component_capacity = T1_dead_components[T1_dead_component].size() - 1 - T1_dead_comp_phi_nodes;
 			}
 			debug_phi_nodes(
-				cout << "T1_capacity: " << T1_dead_component_capacity << endl;
+				Rcout << "T1_capacity: " << T1_dead_component_capacity << endl;
 			)
 			// allocate as much as possible
 			int allocation = remaining_extra_phi_nodes;
@@ -2290,11 +2290,11 @@ int check_socket_group_combination(int k, int kprime, socketcontainer &T1_socket
 				allocation = T1_dead_component_capacity;
 			}
 			debug_phi_nodes(
-				cout << "allocating " << allocation << " dead node";
+				Rcout << "allocating " << allocation << " dead node";
 				if (allocation > 1) {
-					cout << "s";
+					Rcout << "s";
 				}
-				cout << endl;
+				Rcout << endl;
 			)
 			remaining_extra_phi_nodes -= allocation;
 			T2_extra_phi_nodes[s] += allocation;
@@ -2318,9 +2318,9 @@ int check_socket_group_combination(int k, int kprime, socketcontainer &T1_socket
 
 
 	debug_phi_nodes(
-		cout << phi_nodes << " phi_nodes" << endl;
-		cout << non_phi_nodes << " non_phi_nodes" << endl;
-		cout << "replug_distance: " << (2 * kprime) - phi_nodes << endl;
+		Rcout << phi_nodes << " phi_nodes" << endl;
+		Rcout << non_phi_nodes << " non_phi_nodes" << endl;
+		Rcout << "replug_distance: " << (2 * kprime) - phi_nodes << endl;
 	)
 
 
@@ -2337,7 +2337,7 @@ int solve_monotonic_2sat_2vars(vector<vector<int> > &constraints,
                                vector<bool> &preferred_sockets,
                                list<int> &changed_sockets) {
 
-	debug_phi_nodes(cout << "solve_monotonic_2sat_2vars()" << endl;)
+	debug_phi_nodes(Rcout << "solve_monotonic_2sat_2vars()" << endl;)
 
 	// inverse map sockets to constraints
 	map<int, vector<int> > constraint_map = map<int, vector<int> >();
@@ -2370,9 +2370,9 @@ int solve_monotonic_2sat_2vars(vector<vector<int> > &constraints,
 
 	debug_phi_nodes(
 		for (boost::tie(ei, ei_end) = boost::edges(G); ei != ei_end; ei++) {
-			cout << *ei << endl;
+			Rcout << *ei << endl;
 		}
-		cout << endl;
+		Rcout << endl;
 	)
 
 
@@ -2386,13 +2386,13 @@ int solve_monotonic_2sat_2vars(vector<vector<int> > &constraints,
 	}
 
 	int matching_size = boost::matching_size(G, &mate[0]);
-	debug_phi_nodes(cout << "found a matching of size " << matching_size << endl;)
+	debug_phi_nodes(Rcout << "found a matching of size " << matching_size << endl;)
 
 
 	// expand to an edge cover by adding (#vertices - (2 * size of matching))
 	// total is #vertices - matching_size
 	int edge_cover_size = constraints.size() - matching_size;
-	debug_phi_nodes(cout << "found an edge cover of size " << edge_cover_size << endl;)
+	debug_phi_nodes(Rcout << "found an edge cover of size " << edge_cover_size << endl;)
 
 
 	// determine the sockets that move
@@ -2403,7 +2403,7 @@ int solve_monotonic_2sat_2vars(vector<vector<int> > &constraints,
 	for(boost::tie(vi, vi_end) = vertices(G); vi != vi_end; vi++) {
 		// vertex is matched
 		if (mate[*vi] != boost::graph_traits<undirected_graph>::null_vertex() && *vi < mate[*vi]) {
-			debug_phi_nodes(cout << "{" << *vi << ", " << mate[*vi] << "}" << endl;)
+			debug_phi_nodes(Rcout << "{" << *vi << ", " << mate[*vi] << "}" << endl;)
 			handled_constraints[*vi] = true;
 			handled_constraints[mate[*vi]] = true;
 			// find a socket in both constraints
@@ -2414,7 +2414,7 @@ int solve_monotonic_2sat_2vars(vector<vector<int> > &constraints,
 				}
 				for(unsigned int constraint : constraint_map[socket]) {
 					if (constraint == mate[*vi]) {
-						debug_phi_nodes(cout << "both contain " << socket << endl;)
+						debug_phi_nodes(Rcout << "both contain " << socket << endl;)
 						changed_sockets.push_back(socket);
 						done = true;
 						break;
@@ -2437,26 +2437,26 @@ int solve_monotonic_2sat_2vars(vector<vector<int> > &constraints,
 			}
 			int chosen_socket = constraints[*vi][c];
 			debug_phi_nodes(
-				cout << "constraint {" << *vi + 1 << "}" << endl;
-				cout << "chose socket " << chosen_socket+1 << endl;
+				Rcout << "constraint {" << *vi + 1 << "}" << endl;
+				Rcout << "chose socket " << chosen_socket+1 << endl;
 			)
 			changed_sockets.push_back(chosen_socket);
 		}
 	}
 
 	debug_phi_nodes(
-		cout << changed_sockets.size();
+		Rcout << changed_sockets.size();
 		if (changed_sockets.size() == edge_cover_size) {
-			cout << " == ";
+			Rcout << " == ";
 		}
 		else {
-			cout << " !- ";
+			Rcout << " !- ";
 		}
-		cout << edge_cover_size << endl;
+		Rcout << edge_cover_size << endl;
 
-		cout << "unmatched: " << endl;
+		Rcout << "unmatched: " << endl;
 		for (int socket : changed_sockets) {
-			cout << "\t" << socket << endl;
+			Rcout << "\t" << socket << endl;
 		}
 	)
 
@@ -2475,8 +2475,8 @@ bool get_constraint(list<int> &dead_component, socketcontainer &T_sockets, map<s
 	for(int dead : dead_component) {
 		socket *s = T_sockets.find_dead(dead);
 		debug_phi_nodes(
-		cout << "dead: " << dead << endl;
-		cout << "socket: " << s->str() << endl;
+		Rcout << "dead: " << dead << endl;
+		Rcout << "socket: " << s->str() << endl;
 		)
 		map<socket *, int>::iterator socket_pointer_map_iterator =
 				socket_pointer_map.find(s);
@@ -2491,14 +2491,14 @@ bool get_constraint(list<int> &dead_component, socketcontainer &T_sockets, map<s
 
 	}
 	debug_phi_nodes(
-		cout << "constraint: ";
+		Rcout << "constraint: ";
 		for(int i = 0; i < constraint.size(); i++) {
 			if (i != 0) {
-				cout << ",";
+				Rcout << ",";
 			}
-			cout << constraint[i]+1;
+			Rcout << constraint[i]+1;
 		}
-		cout << endl;
+		Rcout << endl;
 	)
 	return trivial;
 }
@@ -2595,7 +2595,7 @@ void add_sockets(unode *xstart, unode *ystart, list<socket *> &sockets) {
 	start = x->get_label();
 	end = y->get_label();
 	debug_sockets(
-		cout << "add_sockets(" << x->get_label() << ", " << y->get_label() << ")" << endl;
+		Rcout << "add_sockets(" << x->get_label() << ", " << y->get_label() << ")" << endl;
 	)
 
 	// store each side of the walk separately to maintain the correct order
@@ -2606,11 +2606,11 @@ void add_sockets(unode *xstart, unode *ystart, list<socket *> &sockets) {
 	if (x == y) {
 		x_path.push_back(new socket(start, end, start, -1));
 		debug_sockets(
-			cout << "\t" << "finding socket s(";
-			cout << start << ", ";
-			cout << end << ", ";
-			cout << start;
-			cout << ")" << endl;
+			Rcout << "\t" << "finding socket s(";
+			Rcout << start << ", ";
+			Rcout << end << ", ";
+			Rcout << start;
+			Rcout << ")" << endl;
 		)
 	}
 
@@ -2621,19 +2621,19 @@ void add_sockets(unode *xstart, unode *ystart, list<socket *> &sockets) {
 
 	while (x != y) {
 		debug_sockets(
-			cout << "\t" << "x: " << x->get_label() << "  (" << x->get_distance() << ")" << endl;
-			cout << "\t" << "y: " << y->get_label() << "  (" << y->get_distance() << ")" << endl;
+			Rcout << "\t" << "x: " << x->get_label() << "  (" << x->get_distance() << ")" << endl;
+			Rcout << "\t" << "y: " << y->get_label() << "  (" << y->get_distance() << ")" << endl;
 		)
 		if (x->get_distance() >= y->get_distance()) {
 			unode *next = x->get_parent();
 			if (next != y) {
 				x_path.push_back(new socket(start, end, next->get_label(), -1));
 				debug_sockets(
-					cout << "\t" << "finding socket s(";
-					cout << start << ", ";
-					cout << end << ", ";
-					cout << next->get_label();
-					cout << ")" << endl;
+					Rcout << "\t" << "finding socket s(";
+					Rcout << start << ", ";
+					Rcout << end << ", ";
+					Rcout << next->get_label();
+					Rcout << ")" << endl;
 				)
 			}
 			x = next;
@@ -2643,11 +2643,11 @@ void add_sockets(unode *xstart, unode *ystart, list<socket *> &sockets) {
 			if (next != x) {
 				y_path.push_front(new socket(start, end, next->get_label(), -1));
 				debug_sockets(
-					cout << "\t" << "finding socket s(";
-					cout << start << ", ";
-					cout << end << ", ";
-					cout << next->get_label();
-					cout << ")" << endl;
+					Rcout << "\t" << "finding socket s(";
+					Rcout << start << ", ";
+					Rcout << end << ", ";
+					Rcout << next->get_label();
+					Rcout << ")" << endl;
 				)
 			}
 			y = next;
@@ -2661,11 +2661,11 @@ void add_sockets(unode *xstart, unode *ystart, list<socket *> &sockets) {
 	for (socket *s : x_path) {
 		s->num = ++count;
 		debug_sockets(
-			cout << "\t" << "adding socket s(";
-			cout << s->i << ", ";
-			cout << s->j << ", ";
-			cout << s->dead  << ", ";
-			cout << s->num << ")" << endl;
+			Rcout << "\t" << "adding socket s(";
+			Rcout << s->i << ", ";
+			Rcout << s->j << ", ";
+			Rcout << s->dead  << ", ";
+			Rcout << s->num << ")" << endl;
 		)
 	}
 
@@ -2694,7 +2694,7 @@ void find_dead_components_hlpr(unode *n, unode *prev, int component, uforest &T,
 	}
 	if (prev != NULL) {
 		int prev_label = prev->get_label();
-//		cout << "checking " << prev_label << " -> " << n_label << endl;
+//		Rcout << "checking " << prev_label << " -> " << n_label << endl;
 		if (T_status[prev_label] == SOCKET) {
 			// found a new 2-socket dead component
 			if (T_status[n_label] == SOCKET) {
@@ -2704,7 +2704,7 @@ void find_dead_components_hlpr(unode *n, unode *prev, int component, uforest &T,
 				if (n_socket->i != prev_socket->i ||
 						n_socket->j != prev_socket->j) {
 
-//					cout << "found" << endl;
+//					Rcout << "found" << endl;
 
 					component = T_dead_components.size();
 					T_dead_components.push_back(list<int>());
@@ -2740,8 +2740,8 @@ void update_nodemapping(nodemapping &twins, uforest &F, int original_label, int 
 		return;
 	}
 	if (original_label != new_label) {
-//		cout << endl << "FOO" << endl << endl;
-//		cout << "\t" << original_label << "->" << new_label << endl;
+//		Rcout << endl << "FOO" << endl << endl;
+//		Rcout << "\t" << original_label << "->" << new_label << endl;
 		int twin;
 		if (forward) {
 			twin = twins.get_forward(original_label);
@@ -2749,7 +2749,7 @@ void update_nodemapping(nodemapping &twins, uforest &F, int original_label, int 
 		else {
 			twin = twins.get_backward(original_label);
 		}
-//		cout << "\t" << twin << endl;
+//		Rcout << "\t" << twin << endl;
 		if (twin != -1) {
 			int parent_label = new_label;
 			if (F.get_node(new_label)->get_parent() != NULL) {
@@ -2768,12 +2768,12 @@ void update_nodemapping(nodemapping &twins, uforest &F, int original_label, int 
 // add the set of phi nodes to the forest
 // TODO: include original socket numbers to reuse nodes?
 void add_phi_nodes(uforest &F, map<pair<int, int>, int> &F_add_phi_nodes) {
-	debug_phi_nodes(cout << "F: " << F.str(true) << endl;)
+	debug_phi_nodes(Rcout << "F: " << F.str(true) << endl;)
 	for(pair<pair<int, int>, int> phi_node_count : F_add_phi_nodes) {
 		int start_id = phi_node_count.first.first;
 		int end_id = phi_node_count.first.second;
 		int count = phi_node_count.second;
-		debug_phi_nodes(cout << "adding " << start_id << ", " << end_id << ": " << count << endl;)
+		debug_phi_nodes(Rcout << "adding " << start_id << ", " << end_id << ": " << count << endl;)
 
 
 		unode *start = F.get_node(start_id);
@@ -2823,7 +2823,7 @@ void add_phi_nodes(uforest &F, map<pair<int, int>, int> &F_add_phi_nodes) {
 			}
 			start = new_socket;
 			count--;
-			debug_phi_nodes(cout << "F: " << F.str(true) << endl;)
+			debug_phi_nodes(Rcout << "F: " << F.str(true) << endl;)
 		}
 	}
 	return;
@@ -2854,30 +2854,30 @@ void leaf_reduction(utree *T1, utree *T2, map<string, int> *label_map = NULL, ma
 	// collapse the terminal subtrees if a label_map and reverse_label_map are given
 	if (label_map != NULL && reverse_label_map != NULL) {
 		unode *T1_new_root = T1->get_node(T1->get_smallest_leaf())->find_uncontracted_node();
-//		cout << "T1: " << *T1 << endl;
+//		Rcout << "T1: " << *T1 << endl;
 		T1->root(T1_new_root);
 		T1->normalize_order(T1_new_root->get_label());
-//		cout << "T1: " << T1->str(T1_new_root->get_label(), ";") << endl;
+//		Rcout << "T1: " << T1->str(T1_new_root->get_label(), ";") << endl;
 		string T1_string = T1->str(T1_new_root->get_label(), ";");
 		utree T1_new = utree(T1_string, label_map, reverse_label_map);
 		// clear node lists so they aren't erased after swapping
 		T1->get_leaves().clear();
 		T1->get_internal_nodes().clear();
 		swap(*T1, T1_new);
-	//	cout << "T1_new: " << T1->str() << endl;
+	//	Rcout << "T1_new: " << T1->str() << endl;
 
 		unode *T2_new_root = T2->get_node(T2->get_smallest_leaf())->find_uncontracted_node();
-//		cout << "T2: " << *T2 << endl;
+//		Rcout << "T2: " << *T2 << endl;
 		T2->root(T2_new_root);
 		T2->normalize_order(T2_new_root->get_label());
-//		cout << "T2: " << T2->str(T2_new_root->get_label(), ";") << endl;
+//		Rcout << "T2: " << T2->str(T2_new_root->get_label(), ";") << endl;
 		string T2_string = T2->str(T2_new_root->get_label(), ";");
 		// clear node lists so they aren't erased after swapping
 		utree T2_new = utree(T2_string, label_map, reverse_label_map);
 		T2->get_leaves().clear();
 		T2->get_internal_nodes().clear();
 		swap(*T2, T2_new);
-//		cout << "T2_new: " << T2->str() << endl;
+//		Rcout << "T2_new: " << T2->str() << endl;
 
 	}
 }
@@ -2889,11 +2889,11 @@ void leaf_reduction_hlpr(utree &T1, utree &T2, nodemapping &twins, map<int, int>
 		map<int, int>::iterator spi;
 		for (spi = sibling_pairs.begin(); spi != sibling_pairs.end(); spi++) {
 		debug(
-			cout << T1.str() << endl;
-			cout << T2.str() << endl;
-			cout << "sibling pairs: " << sibling_pairs.size() << endl;
+			Rcout << T1.str() << endl;
+			Rcout << T2.str() << endl;
+			Rcout << "sibling pairs: " << sibling_pairs.size() << endl;
 			for (pair<int, int> p: sibling_pairs) {
-				cout << p.first << ", " << p.second << endl;
+				Rcout << p.first << ", " << p.second << endl;
 			}
 		)
 			// get sibling pair (a,c) in T1
@@ -2905,12 +2905,12 @@ void leaf_reduction_hlpr(utree &T1, utree &T2, nodemapping &twins, map<int, int>
 			unode *T2_c = T2.get_node(twins.get_forward(T1_c->get_label()));
 
 			debug(
-					cout << spi->first << endl;
-					cout << spi->second << endl;
-					cout << "T1_a: " << T1_a->str() << endl;
-					cout << "T1_c: " << T1_c->str() << endl;
-					cout << "T2_a: " << T1_a->str() << endl;
-					cout << "T2_c: " << T1_c->str() << endl;
+					Rcout << spi->first << endl;
+					Rcout << spi->second << endl;
+					Rcout << "T1_a: " << T1_a->str() << endl;
+					Rcout << "T1_c: " << T1_c->str() << endl;
+					Rcout << "T2_a: " << T1_a->str() << endl;
+					Rcout << "T2_c: " << T1_c->str() << endl;
 			)
 
 			// found a match
@@ -2923,7 +2923,7 @@ void leaf_reduction_hlpr(utree &T1, utree &T2, nodemapping &twins, map<int, int>
 				// make terminal in T1
 				// contract T1_a and T1_c
 				unode *T1_new_terminal = T1_a->get_parent();
-				debug(cout << "T1_new_terminal: " << T1.str_subtree(T1_new_terminal) << endl);
+				debug(Rcout << "T1_new_terminal: " << T1.str_subtree(T1_new_terminal) << endl);
 				T1_new_terminal->set_terminal(true);
 				T1_new_terminal->contract_neighbor(T1_a);
 				T1_new_terminal->contract_neighbor(T1_c);
@@ -2949,8 +2949,8 @@ void leaf_reduction_hlpr(utree &T1, utree &T2, nodemapping &twins, map<int, int>
 				// make terminal in T2
 				// contract T2_a and T2_c
 				debug(
-					cout << "d(T2_a): " << T2_a->get_distance() << endl;
-					cout << "d(T2_c): " << T2_c->get_distance() << endl;
+					Rcout << "d(T2_a): " << T2_a->get_distance() << endl;
+					Rcout << "d(T2_c): " << T2_c->get_distance() << endl;
 				)
 				unode *T2_new_terminal = T2_a->get_parent();
 				if (T2_c->get_parent() == T2_a &&
