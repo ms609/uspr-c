@@ -267,7 +267,8 @@ int print_and_count_mAFs(uforest &F1, uforest &F2, nodemapping &twins, int k, in
 int replug_hlpr(uforest &F1, uforest &F2, nodemapping &twins, int k, pair<uforest, uforest> T);
 
 // compute the TBR distance
-int tbr_distance(uforest &T1, uforest &T2, bool quiet /*= true */, uforest **MAF1_out /*= NULL*/, uforest **MAF2_out /*= NULL*/) {
+int tbr_distance(uforest &T1, uforest &T2, bool quiet /*= true */,
+                 uforest **MAF1_out /*= NULL*/, uforest **MAF2_out /*= NULL*/) {
 	bool old_value = OPTIMIZE_2B;
 	// always safe for the TBR distance
 	OPTIMIZE_2B = true;
