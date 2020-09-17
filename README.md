@@ -7,14 +7,14 @@ Please note that the uSPR distance is NP-hard to compute (as are the TBR and rep
 
 If you are interested in comparing rooted trees in terms of SPR operations, you should use rspr instead (https://github.com/cwhidden/rspr). rspr is also much more efficient and can easily handle pairs of binary rooted trees with 200+ leaves and distances > 50.
 
-This is the code for the preprint "Calculating the Unrooted Subtree-Prune-and-Regraft Distance" by Chris Whidden and Frederick A. Matsen IV. Please see "http://arxiv.org/abs/1511.07529" for more information on the motivation behind this project, the algorithms used and their expected performance.
+This is the code for the preprint "Calculating the Unrooted Subtree-Prune-and-Regraft Distance" by Chris Whidden and Frederick A. Matsen IV. Please see "https://arxiv.org/abs/1511.07529" for more information on the motivation behind this project, the algorithms used and their expected performance.
 
 Copying
 ====
 ```
 Copyright 2018 Chris Whidden
 cwhidden@fredhutch.org
-https://github.com/cwhidden/uspr
+https://github.com/cwhidden/uspr/
 May 1, 2018
 Version 1.0.1
 ```
@@ -161,4 +161,6 @@ Citing uspr
 ====
 If you use uspr in your research, please cite:
 
-Chris Whidden and Frederick A. Matsen IV. Calculating the Unrooted Subtree-Prune-and-Regraft Distance. eprint arXiv:1511.07529. http://arxiv.org/abs/1511.07529
+Chris Whidden and Frederick A. Matsen IV. Calculating the Unrooted 
+Subtree-Prune-and-Regraft Distance. eprint arXiv:1511.07529. 
+https://arxiv.org/abs/1511.07529
